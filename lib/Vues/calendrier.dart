@@ -27,6 +27,7 @@ class _MonCalendrier extends State<Calendrier> {
   DateTime? _selectedDay;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
+  bool mauvaiseHeure = false;
 
   @override
   void initState() {
@@ -207,10 +208,33 @@ class _MonCalendrier extends State<Calendrier> {
           ),
         ),
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
+          onPressed: () async{
             // todo: Show dialog to user to input event
-            showDialog(
-                context: context, builder: (_) => _dialogWidget(context));
+            try {
+              await showDialog(
+                  context: context, builder: (_) => _dialogWidget(context));
+              verificationHeureBool(mauvaiseHeure);
+            } catch (e){
+mauvaiseHeure = false;
+              Alert(
+                context: context,
+                type: AlertType.error,
+                title: "Désolé !",
+                desc:
+                "Vous n'avez pas entré une heure valide. Elle doit être comprise entre 0 et 24",
+                buttons: [
+                  DialogButton(
+                    child: Text(
+                      "Fermer",
+                      style: TextStyle(
+                          color: Colors.white, fontSize: 20),
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                    width: 120,
+                  )
+                ],
+              ).show();
+            }
           },
           label: const Text('Ajout de tache'),
           icon: const Icon(Icons.add),
@@ -295,29 +319,11 @@ class _MonCalendrier extends State<Calendrier> {
                     date: _selectedDay!,
                     notification: recupereNotification));
                 saveList(listeToutesTaches);
-
-              } catch (e){
-                Navigator.of(context).pop();
-                Alert(
-                  context: context,
-                  type: AlertType.error,
-                  title: "Désolé !",
-                  desc:
-                  "Vous n'avez pas entré une heure valide. Elle doit être comprise entre 0 et 24",
-                  buttons: [
-                    DialogButton(
-                      child: Text(
-                        "Fermer",
-                        style: TextStyle(
-                            color: Colors.white, fontSize: 20),
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                      width: 120,
-                    )
-                  ],
-                ).show();
+              }catch(e){
+                Navigator.pop(context);
+                mauvaiseHeure = true;
+                return;
               }
-
               _selectedEvents.value = _getEventsForDay(_selectedDay!);
               clearController();
               Navigator.of(context).pop();

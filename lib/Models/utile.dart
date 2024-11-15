@@ -6,9 +6,14 @@ class EstPasUneHeureValide implements Exception {
   String messageErreur = "Tu ne peux pas entrer un nombre négatif";
 }
 
-//Une méthode qui nous permettra de vérifier si le nombre entré est négatif ou non
 void verificationHeure(int n) {
   if (n < 0 || n > 24) {
+    //Si il l'est, on lève l'exception depuis notre classe de gestion d'exception via notre mot-clé throw
+    throw EstPasUneHeureValide();
+  }
+}
+void verificationHeureBool(bool mauvaiseHeure) {
+  if (mauvaiseHeure == true) {
     //Si il l'est, on lève l'exception depuis notre classe de gestion d'exception via notre mot-clé throw
     throw EstPasUneHeureValide();
   }
