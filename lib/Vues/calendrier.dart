@@ -22,7 +22,7 @@ class _MonCalendrier extends State<Calendrier> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   Map<DateTime, List<Tache>> events = {};
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
-      .toggledOff; // Can be toggled on/off by longpressing a date
+      .toggledOff;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   DateTime? _rangeStart;
@@ -207,14 +207,17 @@ class _MonCalendrier extends State<Calendrier> {
             ],
           ),
         ),
+        // Bouton d'ajout de nouvelle tache
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () async{
             // todo: Show dialog to user to input event
             try {
+              // Appelle la vue d'alerte dialogue qui affichera le formulaire vide
               await showDialog(
                   context: context, builder: (_) => _dialogWidget(context));
               verificationHeureBool(mauvaiseHeure);
             } catch (e){
+              // Exception levée si l'une des heures n'est pas bonne; un entier compris entre 0 et 24
 mauvaiseHeure = false;
               Alert(
                 context: context,
@@ -253,6 +256,7 @@ mauvaiseHeure = false;
     _heure_debController.clear();
     _heure_finController.clear();
   }
+  // Vue d'alerte dialogue affichant le formulaire à saisir
   AlertDialog _dialogWidget(BuildContext context) {
     return AlertDialog.adaptive(
       scrollable: true,
