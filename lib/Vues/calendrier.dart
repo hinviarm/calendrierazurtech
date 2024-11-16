@@ -1,13 +1,10 @@
 import 'package:calendrierazurtech/Models/utile.dart';
-import 'package:calendrierazurtech/Vues/profil.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:switcher_button/switcher_button.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import '../Controleurs/tache.dart';
-import 'dart:convert' as convert;
 
 class Calendrier extends StatefulWidget {
   const Calendrier({super.key});
@@ -32,10 +29,9 @@ class _MonCalendrier extends State<Calendrier> {
   @override
   void initState() {
     super.initState();
-
     _selectedDay = _focusedDay;
     _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
-    //loadPreviousEvents();
+    loadPreviousEvents();
   }
 
   @override
@@ -43,7 +39,14 @@ class _MonCalendrier extends State<Calendrier> {
     _selectedEvents.dispose();
     super.dispose();
   }
-
+  void loadPreviousEvents() async{
+    listeToutesTaches =  await recupliste();
+    var listeElem = listeToutesTaches.where((list) => ( list.date.year == _selectedDay?.year && list.date.month == _selectedDay?.month && list.date.day == _selectedDay?.day)).toList();
+for(var elem in listeElem){
+  events = {_selectedDay!: [elem]};
+  debugPrint("++++++++++++++++++++++"+elem.toString());
+}
+  }
 //*GET EVENTS PER DAY
   List<Tache> _getEventsForDay(DateTime day) {
       return events[day] ??
