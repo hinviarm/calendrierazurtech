@@ -6,7 +6,7 @@ import 'dart:convert' as convert;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EstPasUneHeureValide implements Exception {
-  String messageErreur = "Tu ne peux pas entrer un nombre négatif";
+  String messageErreur = "Tu ne peux pas entrer une heure non comprise entre 0 et 24";
 }
 
 void verificationHeure(int n) {
@@ -43,6 +43,9 @@ void postTacheEnLigne() async{
       }),
     );
   }
+  // Suppression des taches de la session
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.remove("maListe");
 }
 
 
@@ -50,7 +53,7 @@ void postTacheEnLigne() async{
 Future<void> saveList(List<Tache> taches) async {
 final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-// Convertit chaque utilisateur en JSON
+// Convertit chaque tache en JSON
 List<String> jsonStringList = taches.map((user) => jsonEncode(user.toJson())).toList();
 
 // Stocke la liste en session

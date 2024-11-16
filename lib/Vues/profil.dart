@@ -74,7 +74,6 @@ class _MonProfil extends State<Profil> {
   }
 
   Future<String?> _signupUser(SignupData data) {
-    debugPrint("&&&&&&&&"+recupliste().toString());
     debugPrint('Signup Name: ${data.name}, Password: ${data.password}');
     final c1 = Crypt.sha256(data.password!);
     insertion(data.name!, data.password!);
